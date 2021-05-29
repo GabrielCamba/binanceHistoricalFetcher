@@ -13,8 +13,7 @@ TOP_TICKERS = ['BTCUSDT', 'ETHUSDT', 'BNBUSDT', 'XRPUSDT', 'DOGEUSDT',
 INTERVAL = '1h'
 
 def main():
-    logging.basicConfig(filename='fetcher.log',
-    filemode='w', level=logging.DEBUG)
+    logging.basicConfig(filename='./logs/fetcher.log', level=logging.DEBUG)
 
     currentDateTime = str(datetime.datetime.now())
     logging.info('Started at '+currentDateTime)
