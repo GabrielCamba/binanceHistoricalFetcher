@@ -17,6 +17,7 @@ def main():
 
     currentDateTime = str(datetime.datetime.now())
     logging.info('Started at '+currentDateTime)
+    print('Started at '+currentDateTime)
     for ticker in TOP_TICKERS:
         getHistorical.getTicker(ticker, INTERVAL)
     logging.info('Finished')

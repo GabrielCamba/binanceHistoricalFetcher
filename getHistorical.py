@@ -81,6 +81,12 @@ def getTicker(ticker_pair, interval):
             df = new_df
 
         # export DataFrame to csv
-        logging.info('storing lines: '+str(df.shape[0]))
+        logging.info('storing lines: '+str(df.shape[0])+
+                     ' for ticker '+ticker_pair)
+        print('storing lines: '+str(df.shape[0])+
+                     ' for ticker '+ticker_pair)
         df.to_csv(filename)
+    else:
+        logging.info('there was an error fetching data for ticker '+ticker_pair)
+        print('there was an error fetching data for ticker '+ticker_pair)
 
