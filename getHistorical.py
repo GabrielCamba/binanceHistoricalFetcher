@@ -59,7 +59,7 @@ def getTicker(ticker_pair, interval):
     else:
         from_date_to_fetch = earliest_available
 
-    if from_date_to_fetch :
+    if from_date_to_fetch:
         bars = client.get_historical_klines(ticker_pair, '1h',
                                             str(from_date_to_fetch),
                                             limit=1000)
@@ -73,8 +73,6 @@ def getTicker(ticker_pair, interval):
         length = new_df.shape[0]
         logging.info('Fetched data lenght: '+str(length))
 
-        new_df.set_index('date', inplace=True)
-
         if(file_found):
             df = pd.concat([df, new_df])
         else:
@@ -85,7 +83,7 @@ def getTicker(ticker_pair, interval):
                      ' for ticker '+ticker_pair)
         print('storing lines: '+str(df.shape[0])+
                      ' for ticker '+ticker_pair)
-        df.to_csv(filename)
+        df.to_csv(filename, index=False)
     else:
         logging.info('there was an error fetching data for ticker '+ticker_pair)
         print('there was an error fetching data for ticker '+ticker_pair)
