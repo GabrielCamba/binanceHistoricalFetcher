@@ -4,16 +4,22 @@ from binance.client import Client
 from binance.client import BinanceAPIException
 from datetime import datetime
 from pandas import pandas as pd
+from dotenv import load_dotenv
+
+load_dotenv()
 
 api_key = os.environ.get('binance_api')
 api_secret = os.environ.get('binance_secret')
 
-
 # following line is for being able to use the testnet api
 # remove /api to access the website.
 # pass de api_key and api_secret as parameters to the following call
-client = Client("", "")
+client = Client(api_key, api_secret)
 client.API_URL = 'https://testnet.binance.vision/api'
+
+print("--------------Account--------------------")
+print(client.get_account())
+print("--------------/Account--------------------")
 
 def millisToDateTimeString(millis):
     from_obj = datetime.fromtimestamp(millis/1000.0)
