@@ -48,7 +48,9 @@ def getTicker(ticker_pair, interval):
         pass
 
     if(file_found and earliest_available):
-        max_date = df['date'].max()
+        df.set_index('date', inplace=True)
+        index = df.index
+        max_date = index.max()
         max_date_s = millisToDateTimeString(max_date)
         logging.debug('latest register is: '+max_date_s)
         if(earliest_available > max_date):
@@ -74,6 +76,8 @@ def getTicker(ticker_pair, interval):
         length = new_df.shape[0]
         logging.info('Fetched data lenght: '+str(length))
 
+        new_df.set_index('date', inplace=True)
+
         if(file_found):
             df = pd.concat([df, new_df])
         else:
@@ -82,7 +86,7 @@ def getTicker(ticker_pair, interval):
         # export DataFrame to csv
         logging.info('storing lines: '+str(df.shape[0])+
                      ' for ticker '+ticker_pair)
-        df.to_csv(filename, index=False)
+        df.to_csv(filename, index=True)
     else:
         logging.info('there was an error fetching data for ticker '+ticker_pair)
 
