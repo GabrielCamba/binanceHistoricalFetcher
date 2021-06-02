@@ -17,10 +17,6 @@ api_secret = os.environ.get('binance_secret')
 client = Client(api_key, api_secret)
 client.API_URL = 'https://testnet.binance.vision/api'
 
-print("--------------Account--------------------")
-print(client.get_account())
-print("--------------/Account--------------------")
-
 def millisToDateTimeString(millis):
     from_obj = datetime.fromtimestamp(millis/1000.0)
     return str(from_obj)
@@ -49,7 +45,6 @@ def getTicker(ticker_pair, interval):
     except BinanceAPIException as e:
         earliest_available = 0
         logging.error('there was a BinanceAPIException '+str(e.message))
-        print('There was an error: '+e.message)
         pass
 
     if(file_found and earliest_available):
@@ -87,10 +82,7 @@ def getTicker(ticker_pair, interval):
         # export DataFrame to csv
         logging.info('storing lines: '+str(df.shape[0])+
                      ' for ticker '+ticker_pair)
-        print('storing lines: '+str(df.shape[0])+
-                     ' for ticker '+ticker_pair)
         df.to_csv(filename, index=False)
     else:
         logging.info('there was an error fetching data for ticker '+ticker_pair)
-        print('there was an error fetching data for ticker '+ticker_pair)
 
