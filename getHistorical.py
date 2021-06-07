@@ -1,31 +1,19 @@
-import os
 import logging
-from binance.client import Client
 from binance.client import BinanceAPIException
 from datetime import datetime
 from pandas import pandas as pd
-from dotenv import load_dotenv
 
-load_dotenv()
-
-api_key = os.environ.get('binance_api')
-api_secret = os.environ.get('binance_secret')
-
-# following line is for being able to use the testnet api
-# remove /api to access the website.
-# pass de api_key and api_secret as parameters to the following call
-client = Client(api_key, api_secret)
-client.API_URL = 'https://testnet.binance.vision/api'
 
 def millisToDateTimeString(millis):
     from_obj = datetime.fromtimestamp(millis/1000.0)
     return str(from_obj)
 
-def getTicker(ticker_pair, interval):
 
-    filename = 'data/'+ticker_pair+'.csv'
+def getTicker(client, ticker_pair, interval):
 
-    logging.info('Processing '+ticker_pair+' on file: '+filename)
+    filename = 'data/'+ticker_pair+interval+'.csv'
+
+    logging.info('Processing interval: '+interval+' for ticker :'+ticker_pair)
 
     try:
         df = pd.read_csv(filename)
@@ -63,7 +51,7 @@ def getTicker(ticker_pair, interval):
         from_date_to_fetch = earliest_available
 
     if from_date_to_fetch:
-        bars = client.get_historical_klines(ticker_pair, '1h',
+        bars = client.get_historical_klines(ticker_pair, interval,
                                             str(from_date_to_fetch),
                                             limit=1000)
         new_df = pd.DataFrame(bars, columns=['date', 'open', 'high', 'low',
@@ -75,6 +63,7 @@ def getTicker(ticker_pair, interval):
 
         length = new_df.shape[0]
         logging.info('Fetched data lenght: '+str(length))
+        new_df['hrd'] = [datetime.fromtimestamp(x / 1000.0) for x in new_df.date]
 
         new_df.set_index('date', inplace=True)
 
