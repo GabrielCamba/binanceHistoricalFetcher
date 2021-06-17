@@ -9,9 +9,9 @@ def millisToDateTimeString(millis):
     return str(from_obj)
 
 
-def getTicker(client, ticker_pair, interval):
+def getTicker(client, ticker_pair, interval, folder):
 
-    filename = 'data/'+ticker_pair+interval+'.csv'
+    filename = folder+ticker_pair+interval+'.csv'
 
     logging.info('Processing interval: '+interval+' for ticker :'+ticker_pair)
 

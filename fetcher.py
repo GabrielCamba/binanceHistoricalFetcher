@@ -1,4 +1,5 @@
 import os
+import sys
 import logging
 import logging.config
 import getHistorical
@@ -6,19 +7,28 @@ import datetime
 from binance.client import Client
 from dotenv import load_dotenv
 
+logging.config.fileConfig('logging.conf')
+logging.getLogger('fetcher')
+
 load_dotenv()
-# following line is for being able to use the testnet api
-# remove /api to access the website.
-# pass de api_key and api_secret as parameters to the following call
 
 api_key = os.environ.get('binance_api')
 api_secret = os.environ.get('binance_secret')
 
-client = Client(api_key, api_secret)
-#client.API_URL = 'https://testnet.binance.vision/api'
+outputFolder = os.environ.get('output_folder')
+if(outputFolder == None):
+    logging.debug("Output folder not provided, setting default")
+    outputFolder = './data/'
+else:
+    logging.debug("Output folder provided, setting "+outputFolder)
 
-logging.config.fileConfig('logging.conf')
-logging.getLogger('fetcher')
+isdir = os.path.isdir(outputFolder)
+if (not isdir):
+    logging.error("NOT FOUND: Output folder "+outputFolder)
+    sys.exit("ERROR: output folder "+outputFolder+" must exist, pĺease" \
+             "create it or configure an output_folder in your .env file")
+
+client = Client(api_key, api_secret)
 
 TOP_TICKERS = ['BTCUSDT', 'ETHUSDT', 'BNBUSDT',
                'XRPUSDT', 'LTCUSDT', 'TRXUSDT']
@@ -33,7 +43,7 @@ def main():
 
     for ticker in TOP_TICKERS:
         for current in INTERVALS:
-            getHistorical.getTicker(client, ticker, current)
+            getHistorical.getTicker(client, ticker, current, outputFolder)
 
     logging.info('Finished')
 
