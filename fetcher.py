@@ -33,16 +33,16 @@ client = Client(api_key, api_secret)
 with open('tickers') as f:
     tickers = f.read().splitlines()
 
-# valid intervals - 1m, 3m, 5m, 15m, 30m, 1h, 2h, 4h, 6h, 8h, 12h, 1d, 3d, 1w,
-#                   1M
-INTERVALS = ['1h', '4h', '1d']
+with open('intervals') as f:
+    intervals = f.read().splitlines()
+
 
 def main():
     currentDateTime = str(datetime.datetime.now())
     logging.info('Started at '+currentDateTime)
 
     for ticker in tickers:
-        for current in INTERVALS:
+        for current in intervals:
             getHistorical.getTicker(client, ticker, current, outputFolder)
 
     logging.info('Finished')
