@@ -45,6 +45,4 @@ ignore                    - Ignore
 hrd                       - Human readable date (this is a conversion from the column date
 ```
 
-EXPLAIN COLUMNS
-
 - There's a log file in logs directory. If you want to debug there's more information of what had happened.
